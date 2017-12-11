@@ -1,37 +1,106 @@
-#include <stdio.h>
-#include <math.h>
-
-void main(void)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+#define n 5
+#define m 5
+class Matrix {
+private:
+	double M[n][m];
+public:
+	void InputMatrix();
+	void OutputMatrix();
+	void SortVybirRiadok(int);
+	void ArifmaticAverage();
+	void Dobutok(double* ptr);
+};
+void Matrix::InputMatrix()
 {
-	double a, b, result, x, step, pohubka, dodanok;
-	int n;
-	printf("vvedit pochatok");
-	scanf_s("%lf", &a);
-	getchar();
-	printf("vvedit kinets");
-	scanf_s("%lf", &b);
-	getchar();
-	printf("vvedit krok");
-	scanf_s("%lf", &step);
-	getchar();
-	printf("vvedit pohubky");
-	scanf_s("%lf", &pohubka);
-	getchar();
-
-	for (x = a; x <= b; x += step)
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
+		{
+			cout << "[" << i << "][" << j << "]=";
+			cin >> M[i][j];
+		}
+}
+void Matrix::OutputMatrix()
+{
+	for (int i = 0; i < n; i++)
 	{
-		result = 0;
-		n = 1;
+		for (int j = 0; j < m; j++)
+			cout << setw(7) << M[i][j] << " ";
+		cout << endl;
+	}
+}
+void Matrix::SortVybirRiadok(int row)
+{
+	for (int i = 0; i < m; i++)
+	{
+		int max = M[row][i], max_index = i;
 
-		do {
-			dodanok = 2 * ((pow(x - 1, (2 * n + 1))) / ((2 * n + 1)* pow(x + 1, 2 * n + 1)));
-			result = result + dodanok;
-			n++;
-		} while (dodanok >= pohubka);
+		for (int j = i; j < m; j++)
+		{
+			if (M[row][j] < max)
+			{
+				max = M[row][j];
+				max_index = j;
+			}
+		}
+		swap(M[row][i], M[row][max_index]);
+	}
+}
 
-		printf("x = %lf result %lf \n", x, result);
+void Matrix::ArifmaticAverage()
+{
+	double ArifmaticAverage[m - 1];
+	int i, j;
+	for (i = 0; i < m; i++)
+		ArifmaticAverage[i] = 0;
+
+	cout << endl;
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j != i; j++)
+		{
+			ArifmaticAverage[j] = ArifmaticAverage[j] + M[i][j];
+		}
+
+	}
+	for (i = 0; i < m - 1; i++) {
+		ArifmaticAverage[i] = ArifmaticAverage[i] / (n - i - 1);
+		cout << ArifmaticAverage[i] << " ";
+
+	}
+	Dobutok(ArifmaticAverage);
+}
+
+void Matrix::Dobutok(double* ptr)
+{
+	double dob = 1;
+	for (int i = 0; i < m - 1; i++)
+	{
+		dob = dob * ptr[i];
+	}
+	cout << " dobutok =" << dob << endl;
+
+}
+
+void main()
+{
+	Matrix A;
+	cout << "Input elements of matrix A" << endl;
+	A.InputMatrix();
+	cout << "\n newInput Matrix A" << endl;
+	A.OutputMatrix();
+
+	for (int i = 0; i < n; i++)
+	{
+		A.SortVybirRiadok(i);
 	}
 
+	cout << "\n newSorted Matrix A" << endl;
+	A.OutputMatrix();
 
-	getchar();
+	cout << "vuvid mass:" << endl;
+	A.ArifmaticAverage();
+	system("pause");
 }
